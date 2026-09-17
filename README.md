@@ -47,7 +47,35 @@ they are the board, not the brain.
 
 ## Results
 
-See the *Results* section at the bottom (filled from the training run in this repository).
+Training run committed in `data/fly_chess.npz` (600,000 positions, 30 epochs, ~10 min on 4 CPU cores):
+
+| metric (held-out 18,000 positions) | value |
+|---|---|
+| correlation between fly value and `tanh(Stockfish cp / 500)` | **0.911** |
+| agreement on which side is better | 88.8 % |
+| mean squared error | 0.099 |
+| plastic synapses (KC → MBON, all present in the connectome) | 61,040 |
+
+Match play (Python engine, `flybrain.play`, 10 games each, colours alternating):
+
+| fly | opponent | score |
+|---|---|---|
+| Fly (2 ply) | random mover | 10 – 0 |
+| Larva (1 ply) | random mover | 6 – 4 (4 wins, 4 draws, 2 losses) |
+| Fly (2 ply) | Stockfish 17.1 at UCI_Elo 1320, depth 1 | 1.5 – 8.5 (1 win, 1 draw, 8 losses) |
+
+So the fly understands material and basic positional value well enough to crush a random
+player and to win or draw the occasional game against a ~1300-rated engine, but it has no
+tactical calculation beyond the 1–3 plies it imagines. Beginner-level chess from an insect,
+which felt about right.
+
+For comparison, a plain linear model on the raw 773 board features reaches a correlation of
+0.86 on the same data; the fly's fixed sparse expansion plus its trained MBON layer beats
+that. Design choices that mattered: assigning frequently occurring features to the
+best-connected projection neurons (half of the 885 inputs contact fewer than 10 Kenyon
+cells), distributing each projection neuron's output over its synapses in proportion to
+synapse count, and scaling the initial KC → MBON weights so the output is not saturated
+before learning starts.
 
 ## Reproduce
 

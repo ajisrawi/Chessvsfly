@@ -51,7 +51,17 @@
     static async load(baseUrl, fetchImpl) {
       const f = fetchImpl || fetch;
       const meta = await (await f(baseUrl + 'fly_brain.json')).json();
-      const buffer = await (await f(baseUrl + meta.bin)).arrayBuffer();
+      let buffer;
+      if (meta.bin.endsWith('.json')) {
+        // base64-wrapped synapses (for hosts that only serve text files)
+        const b64 = (await (await f(baseUrl + meta.bin)).json()).b64;
+        const bin = atob(b64);
+        const bytes = new Uint8Array(bin.length);
+        for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+        buffer = bytes.buffer;
+      } else {
+        buffer = await (await f(baseUrl + meta.bin)).arrayBuffer();
+      }
       return new FlyBrain(meta, buffer);
     }
 
