@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chess vs Fly</title>
+<meta name="description" content="Play chess against a fruit fly's brain: the mushroom body of the complete male Drosophila connectome, trained to evaluate chess positions.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🪰</text></svg>">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="top">
+  <h1>🪰 Chess vs Fly</h1>
+  <p class="tagline">You are playing against the mushroom body of a real fruit fly brain. Every synapse comes from the complete male <em>Drosophila</em> connectome.</p>
+</header>
+
+<main class="layout">
+  <section class="game">
+    <div class="status" id="status">Loading the fly brain…</div>
+    <div class="board-wrap">
+      <div class="board" id="board" aria-label="chess board"></div>
+    </div>
+    <div class="controls">
+      <label>You play
+        <select id="color">
+          <option value="w">White</option>
+          <option value="b">Black</option>
+        </select>
+      </label>
+      <label>Fly strength
+        <select id="depth">
+          <option value="1">Larva (1 ply)</option>
+          <option value="2" selected>Fly (2 ply)</option>
+          <option value="3">Superfly (3 ply)</option>
+        </select>
+      </label>
+      <button id="new">New game</button>
+      <button id="undo">Undo</button>
+      <button id="hint" title="Ask the fly what it would play for you">Fly hint</button>
+    </div>
+    <div class="moves" id="moves"></div>
+  </section>
+
+  <aside class="brain">
+    <h2>Inside the fly's head</h2>
+    <div class="mood">
+      <div class="mood-label"><span>avoid</span><span id="mood-text">…</span><span>approach</span></div>
+      <div class="mood-bar"><div class="mood-fill" id="mood-fill"></div><div class="mood-mid"></div></div>
+      <p class="hint">How much the fly likes the position of the side to move (the sum of its approach minus avoidance MBONs).</p>
+    </div>
+    <h3>Kenyon cells <span class="dim" id="kc-count"></span></h3>
+    <canvas id="kc" width="256" height="256"></canvas>
+    <div class="legend" id="kc-legend"></div>
+    <h3>Mushroom body output neurons <span class="dim">(97 MBONs)</span></h3>
+    <canvas id="mbon" width="388" height="90"></canvas>
+    <div class="legend"><span><i class="sw plus"></i>approach (ACh / GABA)</span><span><i class="sw minus"></i>avoid (glutamate)</span></div>
+    <p class="hint" id="think-stats"></p>
+  </aside>
+</main>
+
+<section class="about">
+  <h2>How this works</h2>
+  <p>In October 2025 Google Research, HHMI Janelia's FlyEM team and the University of Cambridge released the first
+    complete synapse-level wiring diagram of a male fruit fly's central nervous system: about 166,000 neurons and
+    125 million synapses, reconstructed from electron microscopy with Google's flood-filling networks. This site
+    takes one circuit out of that map, the <strong>mushroom body</strong>, the fly's learning and memory centre,
+    and teaches it chess the way a fly learns everything else.</p>
+  <ol>
+    <li><strong>See the board.</strong> Each of the 773 board features (a piece on a square, a castling right, an
+      en-passant square) is presented as activity in one projection neuron that innervates the mushroom body calyx.</li>
+    <li><strong>Think like a fly.</strong> The connectome's projection-neuron-to-Kenyon-cell synapses turn that into a
+      sparse code across 4,064 Kenyon cells, kept sparse by the GABAergic APL neuron's feedback inhibition and
+      shaped by the million KC-to-KC synapses, exactly as wired in the fly.</li>
+    <li><strong>Learn.</strong> Only the Kenyon-cell-to-MBON synapses are plastic, as in real flies, where dopamine
+      strengthens or weakens them. We trained those synapses (and nothing else) on 600,000 Stockfish-evaluated
+      positions from noisy self-play, with the engine's evaluation standing in for dopamine.</li>
+    <li><strong>Decide.</strong> Glutamatergic MBONs drive avoidance and cholinergic/GABAergic MBONs drive approach
+      (Aso et al. 2014). The fly plays the move that leads to the position it likes most; at higher strengths it
+      imagines your replies too.</li>
+  </ol>
+  <p class="dim">No chess knowledge is programmed anywhere: the rules of chess are provided by the board (chess.js),
+    and the lookahead is bookkeeping over the fly's own evaluations. Source code, training scripts and the research
+    notes are in the <a href="https://github.com/ajisrawi/Chessvsfly">GitHub repository</a>. Connectome data:
+    <a href="https://male-cns.janelia.org/">male-cns.janelia.org</a> (CC-BY).</p>
+</section>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>

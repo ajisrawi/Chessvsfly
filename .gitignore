@@ -1,0 +1,10 @@
+data/malecns/
+data/positions/
+data/*.npz
+!data/circuit.npz
+!data/fly_chess.npz
+__pycache__/
+*.pyc
+.pytest_cache/
+node_modules/
+tools/
