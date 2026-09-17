@@ -1,7 +1,7 @@
 name: Deploy site to GitHub Pages
 on:
   push:
-    branches: [main, master]
+    branches: [main, master, "claude/fruit-fly-chess-ai-8wpzmo"]
     paths: ["web/**", ".github/workflows/pages.yml"]
   workflow_dispatch:
 permissions:
@@ -20,6 +20,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/configure-pages@v5
+        with:
+          enablement: true
       - uses: actions/upload-pages-artifact@v3
         with:
           path: web

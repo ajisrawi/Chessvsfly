@@ -9,7 +9,7 @@ Every neuron and every synapse the fly thinks with is taken from that dataset; t
 thing we changed is the strength of the Kenyon-cell → MBON synapses, which is exactly the
 set of synapses a real fly modifies when it learns.
 
-* **Play:** open `web/index.html` (served from GitHub Pages once enabled, see below) or run
+* **Play:** https://ajisrawi.github.io/Chessvsfly/ (GitHub Pages), or open `web/index.html` locally by running
   `python -m http.server -d web` and visit http://localhost:8000.
 * **Research notes:** [docs/RESEARCH.md](docs/RESEARCH.md) explains the connectome, the
   reconstruction pipeline and the biology behind each modelling choice.
